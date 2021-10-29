@@ -6,16 +6,9 @@ import Dtwitter from "../abis/Dtwitter.json";
 const Main = () => {
   const { selectedAccount } = useContext(Web3Context);
   const [dtwitter, setDtwitter] = useState();
-  const [tweetCount, setTweetCount] = useState(0);
   const [tweets, setTweets] = useState([]);
   const [tweetContent, setTweetContent] = useState();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      await getTweets();
-    })();
-  }, []);
 
   const getTweets = async () => {
     if (window.ethereum) {
@@ -30,13 +23,12 @@ const Main = () => {
           networkData.address
         );
         setDtwitter(contract);
-        const _tweetCount = await contract.methods.tweetCount().call();
-        setTweetCount(_tweetCount);
+        const tweetCount = await contract.methods.tweetCount().call();
         // Load tweets
-        for (var i = 1; i <= _tweetCount; i++) {
+        for (var i = 1; i <= tweetCount; i++) {
           const _tweet = await contract.methods.tweets(i).call();
           console.log(_tweet);
-          setTweets((prevTweets) => [...prevTweets, _tweet]);
+          setTweets((prevTweets) => [_tweet, ...prevTweets]);
         }
         console.log(tweets);
         setLoading(false);
@@ -52,9 +44,19 @@ const Main = () => {
 
   const tweet = async (content) => {
     if (window.ethereum) {
-      await dtwitter.methods.tweet(content).send({ from: selectedAccount });
+      const _tweet = await dtwitter.methods
+        .tweet(content)
+        .send({ from: selectedAccount });
+      console.log(_tweet);
+      setTweets((prevTweets) => [_tweet, ...prevTweets]);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      await getTweets();
+    })();
+  }, []);
 
   return loading ? (
     <div className="text-center mt-5">
