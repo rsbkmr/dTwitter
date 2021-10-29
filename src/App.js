@@ -1,24 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import Main from "./components/Main";
+import Navbar from "./components/Navbar";
+import { Web3Provider } from "./contexts/web3";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Web3Provider>
+      <div className="App">
+        <Navbar />
+        <Main />
+      </div>
+    </Web3Provider>
   );
 }
 
