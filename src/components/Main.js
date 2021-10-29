@@ -65,7 +65,7 @@ const Main = () => {
       </span>
     </div>
   ) : (
-    <div className="container-fluid mt-4" style={{ maxWidth: "40rem" }}>
+    <div className="container-fluid my-4" style={{ maxWidth: "40rem" }}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
